@@ -1,7 +1,9 @@
 import 'package:card_animation/models/cards_container.dart';
+import 'package:card_animation/models/components/spend_container.dart';
 import 'package:card_animation/models/components/topbar.dart';
 import 'package:card_animation/models/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -17,6 +19,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Animation<dynamic> cardXAnimation;
   late Animation<double> cardSize;
   late Animation<double> cardTransform;
+  late Animation<double> spendContainerOpacity;
 
   @override
   void initState() {
@@ -56,6 +59,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       parent: animationController,
       curve: Curves.easeIn,
     );
+
+    spendContainerOpacity = Tween(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeIn,
+      ),
+    );
   }
 
   @override
@@ -74,6 +84,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               cardXAnimation: cardXAnimation,
               cardSize: cardSize,
               cardTransform: cardTransform,
+            ),
+            SpendsContainer(
+              spendContainerOpacity: spendContainerOpacity,
             ),
           ],
         ),

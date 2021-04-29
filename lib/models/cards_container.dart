@@ -1,8 +1,9 @@
 import 'package:card_animation/models/card_model.dart';
 import 'package:card_animation/models/components/card_clipper.dart';
+import 'package:card_animation/models/components/gradient_text.dart';
 import 'package:card_animation/models/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CardsContainer extends StatefulWidget {
   final Animation containerHeightAnimation;
@@ -67,7 +68,7 @@ class _CardsContainerState extends State<CardsContainer> {
                             widget.cardXAnimation.value + ((i + 1) * 5) / 100),
                       alignment: FractionalOffset.center,
                       child: Transform.scale(
-                        scale: widget.cardSize.value + (i + 1) / 100,
+                        scale: widget.cardSize.value + (i + 1) / 120,
                         child: CreditCard(
                           height: height,
                           width: width,
@@ -95,7 +96,7 @@ class _CardsContainerState extends State<CardsContainer> {
 }
 
 class CreditCard extends StatelessWidget {
-  const CreditCard({
+  CreditCard({
     Key? key,
     required this.height,
     required this.width,
@@ -136,53 +137,89 @@ class CreditCard extends StatelessWidget {
             tileMode: TileMode.clamp,
           ),
         ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            gradient: new LinearGradient(
-              colors: cardModel.bottomContainer,
-              begin: Alignment.centerLeft,
-              end: Alignment.topRight,
-              stops: [0.0, 0.9, 1.0],
-              tileMode: TileMode.clamp,
-            ),
-          ),
-          child: ClipPath(
-            clipper: CardShinyClipper(),
-            child: Container(
-              height: height,
-              width: width - 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                gradient: new LinearGradient(
-                  colors: cardModel.topCurveContainer,
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  gradient: new LinearGradient(
+                    colors: cardModel.bottomContainer,
+                    begin: Alignment.centerLeft,
+                    end: Alignment.topRight,
+                    stops: [0.0, 0.9, 1.0],
+                    tileMode: TileMode.clamp,
+                  ),
                 ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 20,
-                    left: 20,
-                    child: Text(
-                      cardModel.title.toUpperCase(),
-                      style: GoogleFonts.openSans(
-                        letterSpacing: 2.0,
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                child: ClipPath(
+                  clipper: CardShinyClipper(),
+                  child: Container(
+                    height: height,
+                    width: width - 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      gradient: new LinearGradient(
+                        colors: cardModel.topCurveContainer,
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp,
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+            Positioned(
+              top: 20,
+              left: 20,
+              child: GradientText(cardModel.title.toUpperCase(),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.grey[700]!,
+                      Colors.white,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  fontSize: 20,
+                  letterSpacing: 3.5),
+            ),
+            Positioned(
+              bottom: 20,
+              left: 20,
+              child: GradientText(
+                "\$" + cardModel.amount.toString().toUpperCase(),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.grey[700]!,
+                    Colors.white,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                fontSize: 36,
+                letterSpacing: 1,
+              ),
+            ),
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: Container(
+                child: SvgPicture.asset(
+                  "assets/rings.svg",
+                  height: 80,
+                  cacheColorFilter: true,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  final Shader linearGradient = LinearGradient(
+    colors: <Color>[Color(0xffDA44bb), Color(0xff8921aa)],
+  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 }
