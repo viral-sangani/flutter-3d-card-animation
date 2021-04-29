@@ -17,7 +17,6 @@ class SpendsContainer extends StatelessWidget {
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.only(
-              top: 30,
               left: 20,
               right: 20,
             ),

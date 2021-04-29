@@ -1,9 +1,9 @@
 import 'package:card_animation/models/cards_container.dart';
+import 'package:card_animation/models/components/card_details.dart';
 import 'package:card_animation/models/components/spend_container.dart';
 import 'package:card_animation/models/components/topbar.dart';
 import 'package:card_animation/models/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -16,14 +16,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController animationController;
 
   late Animation<dynamic> containerHeightAnimation;
+  late Animation<dynamic> cardHeightAnimation;
   late Animation<dynamic> cardXAnimation;
   late Animation<double> cardSize;
   late Animation<double> cardTransform;
   late Animation<double> spendContainerOpacity;
 
+  late bool isDetailOpen;
+  int? selectedCard;
   @override
   void initState() {
     super.initState();
+    isDetailOpen = false;
     animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 600),
@@ -35,30 +39,42 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     ).animate(
       CurvedAnimation(
         parent: animationController,
-        curve: Curves.easeOut,
-        reverseCurve: Curves.easeOut,
+        curve: Curves.easeOutQuad,
+        reverseCurve: Interval(0.0, 0.5, curve: Curves.easeIn),
+      ),
+    );
+
+    cardHeightAnimation = Tween(
+      begin: 0.0,
+      end: 0.5,
+    ).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Interval(0, 0.2, curve: Curves.easeInOutQuint),
+        reverseCurve: Interval(0.9, 1.0, curve: Curves.fastLinearToSlowEaseIn),
       ),
     );
 
     cardXAnimation = Tween(begin: 0.00, end: 0.42).animate(
       CurvedAnimation(
         parent: animationController,
-        curve: Curves.easeOut,
-        reverseCurve: Curves.easeOut,
+        curve: Curves.easeIn,
+        reverseCurve: Curves.easeIn,
       ),
     );
 
     cardSize = Tween(begin: 0.95, end: 1.0).animate(
       CurvedAnimation(
         parent: animationController,
-        curve: Curves.easeIn,
+        curve: Curves.easeInExpo,
       ),
     );
 
-    cardTransform = CurvedAnimation(
+    cardTransform = Tween<double>(begin: 0, end: 0.1).animate(CurvedAnimation(
       parent: animationController,
-      curve: Curves.easeIn,
-    );
+      curve: Interval(0.0, 0.2, curve: Curves.easeIn),
+      reverseCurve: Interval(0.95, 1, curve: Curves.easeOut),
+    ));
 
     spendContainerOpacity = Tween(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
@@ -66,6 +82,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         curve: Curves.easeIn,
       ),
     );
+  }
+
+  void updateIsDetailOpen(bool value, int? index) {
+    setState(() {
+      isDetailOpen = value;
+      selectedCard = index;
+    });
   }
 
   @override
@@ -77,17 +100,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            TopBar(),
+            TopBar(
+              isDetailOpen: isDetailOpen,
+              selectedCard: selectedCard,
+            ),
             CardsContainer(
-              containerHeightAnimation: containerHeightAnimation,
               animationController: animationController,
+              containerHeightAnimation: containerHeightAnimation,
               cardXAnimation: cardXAnimation,
               cardSize: cardSize,
               cardTransform: cardTransform,
+              cardHeightAnimation: cardHeightAnimation,
+              updateIsDetailOpen: updateIsDetailOpen,
             ),
-            SpendsContainer(
-              spendContainerOpacity: spendContainerOpacity,
-            ),
+            SizedBox(height: 20),
+            isDetailOpen
+                ? CardDetails(
+                    spendContainerOpacity: spendContainerOpacity,
+                    selectedCard: selectedCard)
+                : SpendsContainer(
+                    spendContainerOpacity: spendContainerOpacity,
+                  ),
           ],
         ),
       ),

@@ -1,9 +1,14 @@
+import 'package:card_animation/models/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TopBar extends StatelessWidget {
+  final bool isDetailOpen;
+  final int? selectedCard;
   const TopBar({
     Key? key,
+    required this.isDetailOpen,
+    required this.selectedCard,
   }) : super(key: key);
 
   @override
@@ -20,12 +25,16 @@ class TopBar extends StatelessWidget {
           Expanded(
             child: Container(
               alignment: Alignment.center,
-              child: Text(
-                "All Cards",
-                style: GoogleFonts.poppins(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+              child: AnimatedOpacity(
+                opacity: isDetailOpen ? 0 : 1,
+                duration: Duration(milliseconds: 400),
+                child: Text(
+                  "All Cards",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ),
