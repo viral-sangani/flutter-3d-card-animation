@@ -1,6 +1,8 @@
-# card_animation
+# 3D Card Animation in Flutter
 
-A new Flutter project.
+## Demo
+
+![Demo](assets/demo.gif)
 
 ## Getting Started
 
