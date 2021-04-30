@@ -1,4 +1,4 @@
-import 'package:card_animation/models/home_page.dart';
+import 'package:card_animation/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {

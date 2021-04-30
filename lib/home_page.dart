@@ -1,8 +1,8 @@
-import 'package:card_animation/models/cards_container.dart';
-import 'package:card_animation/models/components/card_details.dart';
-import 'package:card_animation/models/components/spend_container.dart';
-import 'package:card_animation/models/components/topbar.dart';
-import 'package:card_animation/models/constants.dart';
+import 'package:card_animation/components/card_details.dart';
+import 'package:card_animation/components/cards_container.dart';
+import 'package:card_animation/components/spend_container.dart';
+import 'package:card_animation/components/topbar.dart';
+import 'package:card_animation/components/constants.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

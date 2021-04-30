@@ -1,7 +1,7 @@
+import 'package:card_animation/components/card_clipper.dart';
+import 'package:card_animation/components/gradient_text.dart';
 import 'package:card_animation/models/card_model.dart';
-import 'package:card_animation/models/components/card_clipper.dart';
-import 'package:card_animation/models/components/gradient_text.dart';
-import 'package:card_animation/models/constants.dart';
+import 'package:card_animation/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
